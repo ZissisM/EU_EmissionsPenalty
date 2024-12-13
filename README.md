@@ -15,11 +15,11 @@
 
 ## Code
 
-**Main Text Figures** [^1] 
+**Main Text Figures** 
 
  * Figure1.do: Generates Figure 1 (B, C, D, E) using the *main dataset. Fig 1A uses Fig1A_revised_v2.xlsx in *Other datasets*.
 
- * Figure2.do: Generates Figure 2.
+ * Figure2.do [^1]: Generates Figure 2.
   
  * Figure 3.do: Generates Figure 3-- 3 panels of 6 country case studies. Uses the main dataset.
   
@@ -34,7 +34,7 @@
  *CarbonLevy_equivalent.do:
 
  
- ## Figures 
+ # Figures 
 
  Each figure is provided, along with each individual panel for each figure, in high-resolution .svg and .pdf format. 
  
