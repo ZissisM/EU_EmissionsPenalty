@@ -34,11 +34,11 @@
  *CarbonLevy_equivalent.do:
 
  
- # Figures 
+ ### Figures 
 
  Each figure is provided, along with each individual panel for each figure, in high-resolution .svg and .pdf format. 
  
-
+### Data Collection
  * Entso-e Pandas Client was used to download the data. Example documentation can be found [here](https://github.com/EnergieID/entsoe-py).
  * _1_a_enstoe_api_fn.py & _1_1b_enstoe_api_fn.py: Used for this purpose to collect the desired data for each country. Anaconda Python Client is used.
  
