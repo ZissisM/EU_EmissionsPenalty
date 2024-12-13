@@ -29,11 +29,11 @@
  
  **Extended Data and SI Figures**
 
- *EDF.do: Generates all Extended Data Figure panels (uses *excess_scat* dataset) and tables (uses *main* dataset).
+ EDF.do: Generates all Extended Data Figure panels (uses *excess_scat* dataset) and tables (uses *main* dataset).
 
- *SI.do: Generates all Supplementary Figure panels and tables (besides the ones mentioned above). Each dataset used is specified above each panel (either *main* or excess_scat*).
+ SI.do: Generates all Supplementary Figure panels and tables (besides the ones mentioned above). Each dataset used is specified above each panel (either *main* or excess_scat*).
 
- *CarbonLevy_equivalent.do: Uses *prices_2022* dataset to iteratively find the carbon price that would result in the same average relative price as the natural gas cap would yield during the same time period.
+ CarbonLevy_equivalent.do: Uses *prices_2022* dataset to iteratively find the carbon price that would result in the same average relative price as the natural gas cap would yield during the same time period.
 
  
  ### Figures 
