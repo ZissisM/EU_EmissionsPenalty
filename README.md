@@ -10,14 +10,14 @@
  * *Excess_scat* includes a cross-sectional dataset of all countries, except Ireland (as noted in the Methods) used to generate Figure 4 and Supplementary Figures using scatter plots.
 
  * *Fig5_new* includes data used to generate Figure 5, after calculating the counterfactuals and estimated consequences from the two different policies: cabron levy and natural gas price cap. 
- * 
+  
  * *Other datasets* include datasets used to calculate the substitution effect-equivelent carbon levy for 2022, Figure 1A natural gas timeseries, and data on historic emisisons.
 
 ## Code
 
 **Main Text Figures** 
 
- * Figure1.do: Generates Figure 1 (B, C, D, E) using the *main dataset. Fig 1A uses Fig1A_revised_v2.xlsx in *Other datasets*.
+ * Figure1.do: Generates Figure 1 (B, C, D, E) using the main dataset. Fig 1A uses Fig1A.xlsx in *Other datasets*.
 
  * Figure2.do [^1]: Generates Figure 2.
   
@@ -39,7 +39,7 @@
  Each figure is provided, along with each individual panel for each figure, in high-resolution .svg and .pdf format. 
  
 ### Data Collection
- * Entso-e Pandas Client was used to download the data. Example documentation can be found [here](https://github.com/EnergieID/entsoe-py).
+ * Entso-e Pandas Client was used to download the electricity generation and wholesale price data. Example documentation can be found [here](https://github.com/EnergieID/entsoe-py).
  * _1_a_enstoe_api_fn.py & _1_1b_enstoe_api_fn.py: Used for this purpose to collect the desired data for each country. Anaconda Python Client is used.
  
 [^1]: The website tool [Datawrapper.de](https://datawrapper.dwcdn.net/Wi1uA/1/) was used for the construction of maps for Figure 2 (A, B, E) with our estimated results (from main dataset). Example [link](https://www.datawrapper.de/_/3KERv/) to Fig2A map. Powerpoint was used for visual modification and merging of images to create certain figures (i.e., Figure 2).
