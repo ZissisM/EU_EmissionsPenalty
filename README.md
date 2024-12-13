@@ -38,7 +38,7 @@
  
  ### Figures 
 
- Each figure is provided, along with each individual panel for each figure, in high-resolution .svg and .pdf format. 
+ Each figure is provided, along with each individual panel for each figure, in high-resolution .svg and .pdf format, in the Figures folder. 
  
 ### Data Collection
  * Entso-e Pandas Client was used to download the electricity generation and wholesale price data. Example documentation can be found [here](https://github.com/EnergieID/entsoe-py).
