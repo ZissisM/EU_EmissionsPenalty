@@ -1,4 +1,4 @@
-use ukraine_17b
+use main
 
 
 ***Fig 5 / Counterfactuals ****
@@ -15,7 +15,7 @@ gen rel_gascapN=gas_price_cappedCN/(price_usd_to_eur*price_coal_tonne/8.14+price
 drop  diff_2022Percent diff_2022Ch
 gen diff_2022Percent=(2.364759-2.247722)*marginal_effectN
 replace diff_2022Percent=exp(diff_2022Percent)-1
-gen diff_2022Ch=diff_2022Percent*avg_y_coal_lignite if sample==1
+gen diff_2022Ch=diff_2022Percent*avg_y_coal_lignite 
 tabstat diff_2022Ch,by(country)
 
 **Emissions

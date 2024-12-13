@@ -1,5 +1,5 @@
 
-use prices_2022_ukraine
+use prices_2022
 cap drop diff carbon_tax temp temp_mean
 cap drop diff carbon_tax
 gen diff = .
