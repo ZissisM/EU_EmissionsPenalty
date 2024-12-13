@@ -1,14 +1,12 @@
 
 
 *imported dataset has generations, electricity prices, gas prices and coal prices
-import delimited "/Users/ZMarmarelis/Desktop/Taraq_transfer/EU_workspace/data/ukraine/_17_3b_regression_cleanV3.csv", clear 
+//import delimited "/Users/ZMarmarelis/Desktop/Taraq_transfer/EU_workspace/data/ukraine/_17_3b_regression_cleanV3.csv", clear 
 
-
-use ukraine_17b
+use main
 
 gen double t=clock(t,"YMDhms")
 format t %tc
-
 
 
 gen rel_testN= (price_gas+price_carbon*0.37*0.3)/(price_usd_to_eur*price_coal_tonne/8.14+price_carbon*0.3)
@@ -16,30 +14,22 @@ gen gas_p_c=price_gas+price_carbon*0.37
 gen sample=1 if dt>22370 & dt<22797 
 replace sample=0 if missing(sample)
 
-
+*Relative prices 
 // 	1.252849 // Jan-March 2021
 // 	1.878083 //Sample
 // 	2.364759  // 2022
-// 	1.805 // Low Price
-// 	2.7 //Avg price
-// 	3.63  //High price
 
 
+*capacity factor (not used anymore)
 egen max_coal=max(y_coal_lignite) if sample==1,by(country)
-*capacity factor
 gen cf_coal=(total_coal/max_coal)
-egen avg_y_coal_lignite = mean(y_coal_lignite) if sample == 1, by(country)
 
+
+egen avg_y_coal_lignite = mean(y_coal_lignite) if sample == 1, by(country)
 egen avg_electricity=mean(electricity_prices) if year==2022,by(country)
 egen avg_load=mean(load) if year==2022,by(country)
 
-
-cap drop marginal_effect1 se_marginal_effect1 marginal_effect2 se_marginal_effect2 marginal_effect3
-cap gen marginal_effect1 = .
-cap gen se_marginal_effect1 = .
-cap gen marginal_effect2 = .
-cap gen se_marginal_effect2 = .
-cap gen marginal_effect3 = .
+**Main Marginal effect!
 gen marginal_effectN=.
 
 
@@ -63,19 +53,20 @@ gen counter_check=.
 gen excess_check=.
 label var counter_check "Different baseline reference"
 label var excess_check "With different baseline reference"
-//rel_testN=1.1
+//rel_testN=1.1 (lower reference)
 
 
 gen counter_check2=.
 gen excess_check2=.
 label var counter_check2 "Different baseline reference"
 label var excess_check2 "With different baseline reference"
-/// rel_testN=1.4
+/// rel_testN=1.4 (higher reference)
 
 
-***Calculate Excess Coal 
-//foreach y in "BG" "CZ" "DE" "DK" "ES" "FI"  "HR" "HU" "IT" "IE" "NL" "PL" "RO" {
-foreach y in "GR"{
+***Calculate Excess Coal  (Panel A)
+*Results are then used to create map using datawrapper (https://www.datawrapper.de/_/3KERv/)
+foreach y in "BG" "CZ" "DE" "DK" "ES" "FI"  "HR" "HU" "IT" "IE" "NL" "PL" "RO" {
+//foreach y in "GR"{
 	
 	reg  lncoalgen c.rel_testN##c.rel_testN##c.rel_testN i.hour ire load load_sq i.dow i.month if sample == 1 & country == "`y'", cl(dt)
 	//GR has different time FE because of how their gas market works (GR later)
@@ -97,8 +88,10 @@ foreach y in "GR"{
 	replace excess = avg_y_coal_lignite/1000 - counter if country == "`y'"
 
 }
+*different baseline
 //replace excess_check2= excess_check2*1000
 //replace excess_check= excess_check*1000
+
 **Different robustness checks under different price ratio comparison (Supp. Fig. XX-XX)
 tabstat excess excess_check2 excess_check,by(country)
 //replace excess=excess*1000
@@ -108,7 +101,9 @@ cap replace relative_gen=excess/baseline_gen
 tabstat relative_gen,by(country)
 tabstat avg_y_coal_lignite,by(country)
 
-*excess EMISSIONS
+***excess EMISSIONS (converted to ktonnes per year)
+*Panel B
+*https://www.datawrapper.de/_/GBMrw/ Map link using these data
 egen coal_avg=mean(y_coal) if sample==1,by(country)
 egen lignite_avg=mean(y_lignite) if sample==1,by(country)
 replace coal_emissions=(coal_avg/avg_y_coal_lignite)*excess*830
@@ -125,8 +120,9 @@ egen baseline_gen=mean(y_coal_lignite) if year>2020,by(country)
 gen relative_gen=excess/baseline_gen
 tabstat relative_gen,by(country)
 
-putexcel set excess_coal, replace
 
+*Save to excel to output
+putexcel set excess_coal, replace
 putexcel A1 = "Country"
 putexcel B1= "Excess Coal" //panel C
 putexcel C1= "Excess Emissions" ///panel D
@@ -163,10 +159,10 @@ foreach y in "BG" "CZ" "DE" "DK" "ES" "FI" "GR" "HR" "HU" "IT" "IE" "NL" "PL" "R
 
 
 ***Excess Wholesale Price***
-**What is excess wholesale price? The observed price - predicted the price under lower ratio (1.252849)
+*Panel E
+*https://www.datawrapper.de/_/vwC3I/ : Map link using these data
+**What is excess wholesale price? The observed price - predicted the price under lower pre-crisis ratio from Jan-April 2021 (1.252849)
 
-drop wholesale_exc
-gen wholesale_exc=.
 eststo clear 
 foreach y in "BG" "CZ" "DE" "DK" "ES" "FI"  "HR" "HU" "IT" "NL" "PL" "RO" {
 //foreach y in "GR" {
@@ -176,30 +172,29 @@ foreach y in "BG" "CZ" "DE" "DK" "ES" "FI"  "HR" "HU" "IT" "NL" "PL" "RO" {
 	replace passthrough=_b[price_gas] if country=="`y'"
 	}
  }
- replace wholesale_counter=passthrough*32.29858 if sample==1
+replace wholesale_counter=passthrough*32.29858 if sample==1
 replace wholesale_excess=electricity_prices-wholesale_counter if sample==1
 tabstat wholesale_excess, by (country)
-tabstat wholesale_exessc,by(country)
-
 
 
 **Panel G
+*Distribution box plot for wholesale electricity prices
 graph box electricity_prices if sample==1 & !missing(electricity_prices),over(country,sort(1)) title("Electricity Price Distribution April 2021-June 2022") intensity(55)  ylabel(,labsize(*1.3)) ytitle("EUR/MWh",size(*1.3)) asyvars nooutsides showyvars legend(off)
 graph export "fig2g.svg", as(svg) width(2300) replace
 
-
-
 **Panel D
+*Distribution box plot for coal generation
 graph box y_coal_lignite if sample==1,over(country,sort(1)) title("Coal Generation April 2021-June 2022") intensity(65) ylabel(,labsize(*1.3)) ytitle("MWh",size(*1.3)) asyvars nooutsides showyvars legend(off)
 graph export "fig2d.svg", as(svg) width(2300) replace
 
-
 **Panel C
+*Average Coal Responsiveness estimates per country
 use excess_scat
 graph hbar coalM if !missing(correl),over(labels,sort(1) descending) ytitle("Average Coal Respsonsiveness") bar(1, color(emerald%85)) ylabel(,labsize(*1.4)) name(coalR,replace) title("",size(*1.3) pos(11))
 graph export "fig2c.svg", as(svg) width(2300) replace
 
 **Panel F
+*Average Natural Gas to Electricity Price Pass-through estimates per country
 graph hbar passthrough if !missing(correl),over(labels,sort(1) descending) ytitle("Average Pass-through Coefficient") bar(1, color(sand%85)) ylabel(,labsize(*1.4)) name(pass,replace) title("",size(*1.3) pos(11))
 graph export "fig2f.svg", as(svg) width(2300) replace
 

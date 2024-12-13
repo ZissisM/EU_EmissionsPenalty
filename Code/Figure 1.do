@@ -1,11 +1,12 @@
 *Figure 1 panels* B,C,D,E
 
-use XXX
-egen mean_elec=mean(electricity_prices) if sample==1 & !missing(electricity_prices),by(t)
-egen elec_ma=mean(mean_elec) if sample==1,by(date)
+use main
 
-egen avg_co=mean(y_coal_lignite) if sample==1,by(t)
-egen avg_coallig=mean(avg_co) if sample==1,by(date)
+cap egen mean_elec=mean(electricity_prices) if sample==1 & !missing(electricity_prices),by(t)
+cap egen elec_ma=mean(mean_elec) if sample==1,by(date)
+
+cap egen avg_co=mean(y_coal_lignite) if sample==1,by(t)
+cap egen avg_coallig=mean(avg_co) if sample==1,by(date)
 
 tw line avg_coallig t if sample==1,sort
 
@@ -13,6 +14,7 @@ tw line avg_coallig t if sample==1,sort
 **Greece is just randomly selected, here all countries have same data 
 
 **Panel D
+**Create lines for averages overlaid: baselines and march 2022
 cap drop yline xline
 gen yline=45 if dt >= 22371 & dt <= 22401
 gen xline = dt if !missing(yline)

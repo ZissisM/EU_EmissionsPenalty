@@ -1,4 +1,7 @@
 
+
+**Generated the shares of energy per hour per country 
+
 // egen coal_hour = mean(y_coal_lignite), by(country hour)
 // egen coal_hourS =mean(y_coal_lignite_pct), by(country hour)
 // drop ire_hour ire_hourS cap_ire irecf irecf_hour
@@ -27,17 +30,16 @@
 // label var nuc_share_hour  "Nuclear"
 
 
-**Figure 4 panels**
+**Figure 3 panels**
+use main
 
-
+**Greece estimation is modified as discussed in Methods, due to its peculiarity with the monthly natural gas price (no month FE).
 //foreach y in "BG" "CZ" "DE" "DK" "ES" "GR" "FI"  "HR" "HU" "IT" "NL" "PL" "RO" {
 	
-//Figure 4
 foreach y in "CZ" "PL" "DE" "FI" "ES"{
 //foreach y in "GR"{
 **These ones go in SI:
 //foreach y in "BG" "DK" "ES" "GR" "FI" "PL" {
-
 
 	reg  lncoalgen c.rel_testN##c.rel_testN##c.rel_testN##i.hour ire load load_sq i.dow i.month if sample == 1 & country == "`y'", cl(dt)
 	//IF GR

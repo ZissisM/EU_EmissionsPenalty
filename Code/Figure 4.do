@@ -1,7 +1,6 @@
 **Figure 4 
 
 
-
 use excess_scat 
 **Relative Respsonsiveness
 foreach y "BG" "CZ" "DE" "DK" "ES" "FI" "HR" "HU" "IT" "IE"  "NL" "PL" "RO"{
@@ -19,13 +18,16 @@ foreach y "BG" "CZ" "DE" "DK" "ES" "FI" "HR" "HU" "IT" "IE"  "NL" "PL" "RO"{
 }
 
 
-**Calculate correlations in Excel and save as correl variable and import into dataset
+**Calculate correlations per 24 hourly estimates in Excel (corr) and save as correl variable and import into dataset
 
+
+*Relative responsiveness
+*Panel A
 graph hbar correl if !missing(correl),over(labels, sort(1)) ytitle("Relative Responsiveness") bar(1, color(maroon%80)) ylabel(,labsize(*1.4)) name(corrs,replace) title("A)",size(*1.3) pos(11))
 graph export Fig4A.svg, as(svg) width(2400)
 
 
-
+*Relative responsiveness relationship with coal share per country 
 robreg mm correl coal_share if exclude==0
 matrix b=e(b)
 cap gen z7=1 
@@ -41,7 +43,7 @@ twoway scatter correl coal_share if exclude==0, mlabel(labels)  mlabvposition(z7
 graph export Fig4B.svg, as(svg) width(2400)
 
 
-
+*Relative responsiveness relationship with decabronized share (solar,wind,hydro,nuclear) per country 
 robreg mm correl decarb_share if exclude==0
 matrix b=e(b)
 cap gen z7=1 
@@ -51,6 +53,5 @@ replace z7= 4 if Country=="ES"
 
 twoway scatter correl decarb_share if exclude==0, mlabel(labels) mlabvposition(z7) mlabsize(*1.5) msymbol(d) mcolor(maroon%75) msize(*1.5) color(navy) graphregion(lstyle(none)) title("C)",position(11) size(*1.4)) xtitle("Decarbonized share",size(*1.47)) ylabel(,labsize(*1.6) grid gmax gmin glwidth(0.5)) legend(off) xlabel(,labsize(*1.5)) ytitle("Relative Responsiveness",size(*1.4)) name(decorr,replace) || function y=_b[decarb_share]*x+_b[_cons],range(decarb_share) || lfit correl decarb_share if exclude==0, lcolor(ebblue*0.5) 
 graph export Fig4C.svg, as(svg) width(2400)
-
 
 **Combine all in powerpoint to make Figure 4

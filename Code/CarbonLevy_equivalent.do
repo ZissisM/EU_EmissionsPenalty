@@ -11,7 +11,7 @@ forval i = 100(1)20000 {
     local x = `i' / 1000
     quietly gen temp = (price_gas + `x'*0.37*0.3+price_carbon*0.37*0.3) / (coal_p + (price_carbon+`x')*0.3)
     quietly egen temp_mean = mean(temp)
-	*1.049069 is the average price gas capped in sample  -- 2.247722 is new price after carbon conevrsion
+	*2.247722 is new price after carbon conversion
     quietly replace diff = abs(temp_mean - 2.247722) 
 
     summarize diff, meanonly 

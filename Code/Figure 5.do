@@ -19,7 +19,7 @@ gen diff_2022Ch=diff_2022Percent*avg_y_coal_lignite
 tabstat diff_2022Ch,by(country)
 
 **Emissions
-replace substitution_emissions=(diff_2022Ch*(coal_avg/avg_y_coal_lignite)*830)+(diff_2022Ch*(lignite_avg/avg_y_coal_lignite)*1100)
+replace substitution_emissions=(diff_2022Ch*(coal_avg/avg_y_coal_lignite)*830)+(diff_2022Ch*(lignite_avg/avg_y_coal_lignite)*110
 replace sub_emissions_year=substitution_emissions*24*365/1000000
 
 **relative emissions
@@ -167,9 +167,7 @@ graph combine Total  EmissionsChange PriceChange Rev  ,altshrink
 graph export Fig5.svg, as(svg) width(3000) replace
 
 
-
 **Relative
-
-graph bar  change_elecPriceGasCap_rel change_elecriceCarbonTax_rel  ,over(Country)   legend( label(1 "180 EUR/MWh Natural Gas Cap") label(2 "Equivalent (12.18 EUR/tonne) Carbon Tax") ring(1) position(6)) ytitle("2022 Relative Wholesale Electricity Price Change (EUR/MWh)",size(*0.88)) asyvars bar(2,color(maroon)) bar(1,color(green)) intensity(50) name(rPriceChange,replace) title("",position(11) size(*1.5))
+*Supp. Fig. XX
 
 graph bar change_elecPriceGasCap_rel change_elecriceCarbonTax_rel  ,over(Country)  legend( label(1 "180 EUR/MWh Natural Gas Cap") label(2 "Equivalent (12.18 EUR/tonne) Carbon Tax") ring(1) position(6)) ytitle("2022 Relative Wholesale Electricity Price Change (EUR/MWh)",size(*0.88)) asyvars bar(2,color(maroon)) bar(1,color(green)) intensity(50) name(PriceChange,replace) title("",position(11) size(*1.5))
