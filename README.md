@@ -1,7 +1,7 @@
 # "Emergency Response Mechanisms for addressing challenges with high gas prices in international energy markets" Replication Package
 ### Antonio Bento, Nicolas Koch, and Zissis Marmarelis
 
-#### The following repository contains all of the curated datasets and code used to generate each figure and result in the paper "Emergency Response Mechanisms for addressing challenges with high gas prices in international energy markets". The model output was generated in STATA 16.1. You can find the code for the analysis and each figure below, along with the corresponding dataset that is used. Any questions with the code or data please contact zmarmare@usc.edu
+#### The following repository contains all of the curated datasets and code used to generate each figure and result in the paper "Emergency Response Mechanisms for addressing challenges with high gas prices in international energy markets". The model output was generated in STATA 16.1. You can find the code for the analysis and each figure below, along with the corresponding dataset that is used. Any questions with the code or data please contact zmarmare@usc.edu. Installation time should be minimal.
 
 ## Datasets 
 
@@ -31,7 +31,7 @@
 
  EDF.do: Generates all Extended Data Figure panels (uses *excess_scat* dataset) and tables (uses *main* dataset).
 
- SI.do: Generates all Supplementary Figure panels and tables (besides the ones mentioned above). Each dataset used is specified above each panel (either *main* or excess_scat*).
+ SI.do: Generates all Supplementary Figure panels and tables (besides the ones mentioned above). Each dataset used is specified above each panel (either *main* or *excess_scat*).
 
  CarbonLevy_equivalent.do: Uses *prices_2022* dataset to iteratively find the carbon price that would result in the same average relative price as the natural gas cap would yield during the same time period.
 
