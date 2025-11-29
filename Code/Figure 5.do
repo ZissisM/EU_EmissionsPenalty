@@ -29,7 +29,7 @@ tabstat rel_sub change_elecriceCarbonTax_rel change_elecPriceGasCap_rel if sampl
 
 *Electricity Change from Gas Cap (do same with other carbon tax prices, which would have opposite effect (higher price and less electricity demand))
 
-replace change_gaspriceCap=(gas_price_capped-price_gas)
+//replace change_gaspriceCap=(gas_price_capped-price_gas)
 * Need to multiply by emissions factor (like 0.3) to get EUR/MWh
 replace change_carbonTax=(carbon_tax*emissions_fac)
 *now in EUR/MWh once multiplied by emissions factor 
@@ -39,11 +39,12 @@ egen avg_electricity=mean(electricity_prices) if year==2022,by(country)
 egen avg_load=mean(load) if year==2022,by(country)
 
 **change in electricity PRICE 
-replace change_gaspriceCap=(gas_price_capped-price_gas) 
+replace change_gaspriceCap=(gas_price_cappedN-price_gas) 
 replace rel_price_change=change_gaspriceCap
 replace change_electricityPriceGasCap=(rel_price_change*passthrough) if year==2022
 replace rel_price_change=change_carbonTax
 replace change_electricityPriceCarbonTax=(rel_price_change*passthrough)*0.37 if year==2022
+**0.37 of the NG pass-through goes to the carbon pass-through
 
 tabstat change_electricityPriceGasCap change_electricityPriceCarbonTax if year==2022,by(country)
 
@@ -52,7 +53,7 @@ replace change_elecPriceGasCap_rel= change_electricityPriceGasCap/avg_electricit
 replace change_elecriceCarbonTax_rel= change_electricityPriceCarbonTax/avg_electricity 
 
 
-*Change electricity generation from price change (output effect)
+*Change electricity generation from price change (output effect) with elasticy=-0.06
 replace change_electricityGenGasCap=change_electricityPriceGasCap/avg_electricity*elasticity*avg_load*1000 if year==2022
 replace change_electricityGenCarbonTax=change_electricityPriceCarbonTax/avg_electricity*elasticity*avg_load*1000 if year==2022
 
@@ -64,7 +65,7 @@ replace change_emissionsCarbonTax=change_electricityGenCarbonTax*emissions_fac*2
 tabstat change_emissionsGasCap change_emissionsCarbonTax sub_emissions_year if year==2022,by(country)
 
 *Save to excel
-putexcel set Fig4_new2, replace
+putexcel set Fig4_new3, replace
 
 putexcel A1 = "Country"
 putexcel B1= "Price Change Gas Cap" 
@@ -96,14 +97,14 @@ foreach y in "BG" "CZ" "DE" "DK" "ES" "FI" "GR" "HR" "HU" "IT" "NL" "PL" "RO" {
 }
 
 
-//import excel "/Users/ZMarmarelis/Downloads/Fig5_new.xlsx", sheet("Sheet1") firstrow clear
+import excel "/Users/ZMarmarelis/Downloads/XX.xlsx", sheet("Sheet1") firstrow clear
 
 **Dataset with updated values for countries
 use Fig5_new,clear 
 
-*Total Emissions adding substitution and output effect
-replace total_emissionsCap=-EmissionsChange2022+EmissionsChangeGasCap
-replace total_emissionsTax=EmissionsChangeCarbonTax-EmissionsChange2022 
+*Total Emissions adding substitution and output effect (from above excel X)
+//replace total_emissionsCap=-EmissionsChange2022+EmissionsChangeGasCap
+//replace total_emissionsTax=EmissionsChangeCarbonTax-EmissionsChange2022 
 
 *Carbon revenue calcuation from carbon equivalent price (12.18 EUR/tonne)
 *divide by 1000 to be in thousands euros
@@ -134,10 +135,17 @@ graph bar  change_elecPriceGasCap_rel change_elecriceCarbonTax_rel   ,over(Count
 *Supp. Fig. XX
 graph bar  subYN   ,over(Country) ytitle("Substitution (Ktonnes CO2/year)",size(*0.88))  intensity(50) name(PriceChange,replace) title("",position(11) size(*1.5))
 
-*Changed this to have subYN (new subyear from above)
+*Changed this to have subYN (new subyear from above excel)
 replace total_emissionsCap=-subYN+EmissionsChangeGasCap
 replace total_emissionsTax=EmissionsChangeCarbonTax-subYN 
 
+
+gen breakeven_pct = totalBurdenTax / Carbon_Revenue
+gen breakeven_pct100 = breakeven_pct * 100
+format breakeven_pct100 %4.1f
+
+
+gen breakeven_pctGas = relief / Carbon_Revenue *100
 
 
 *Panel C
@@ -159,7 +167,8 @@ graph bar total_emissionsCap total_emissionsTax ,over(Country) legend( label(1 "
 graph export "fig5a.svg", as(svg) width(2500) replace
 
 **Panel D
-graph bar Carbon_Revenue totalBurdenTax relief, over(Country) ytitle("Euros (Thousands)")  intensity(60) legend(label(1 "Revenue from 12.18 EUR/tonne Carbon Tax") label(2 "Burden from 12.18 EUR/tonne Carbon Tax") label(3 "Relief from 180 EUR/MWh Gas Cap") ring(1) position(6)) name(Rev,replace) asyvars bar(1,color(cranberry*0.6)) bar(2,color(edkblue*0.8)) bar(2,color(emerald*0.7)) title("D)",position(11)  size(*1.5))
+graph bar Carbon_Revenue totalBurdenTax relief, over(Country) ytitle("Euros (Thousands)")  intensity(60) legend(label(1 "Revenue from 12.18 EUR/tonne Carbon Tax") label(2 "Burden from 12.18 EUR/tonne Carbon Tax") label(3 "Relief from 180 EUR/MWh Gas Cap") ring(1) position(6)) name(Rev,replace) asyvars bar(1,color(cranberry*0.6)) bar(2,color(edkblue*0.8)) bar(2,color(emerald*0.7)) title("D)",position(11)  size(*1.5))  
+	
 graph export "fig5d.svg", as(svg) width(2500) replace
 
 
@@ -171,3 +180,4 @@ graph export Fig5.svg, as(svg) width(3000) replace
 *Supp. Fig. XX
 
 graph bar change_elecPriceGasCap_rel change_elecriceCarbonTax_rel  ,over(Country)  legend( label(1 "180 EUR/MWh Natural Gas Cap") label(2 "Equivalent (12.18 EUR/tonne) Carbon Tax") ring(1) position(6)) ytitle("2022 Relative Wholesale Electricity Price Change (EUR/MWh)",size(*0.88)) asyvars bar(2,color(maroon)) bar(1,color(green)) intensity(50) name(PriceChange,replace) title("",position(11) size(*1.5))
+

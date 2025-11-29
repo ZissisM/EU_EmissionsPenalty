@@ -1,0 +1,25 @@
+{\rtf1\fs24
+\trowd\trgaph75\trleft-75\intbl\trqc\clbrdrt\brdrs\cellx4320\clbrdrt\brdrs\cellx5904\clbrdrt\brdrs\cellx7488\clbrdrt\brdrs\cellx8928\clbrdrt\brdrs\cellx10656\clbrdrt\brdrs\cellx12096\clbrdrt\brdrs\cellx13824\clbrdrt\brdrs\cellx15408
+\ql \cell\qc (1)\cell\qc (2)\cell\qc (3)\cell\qc (4)\cell\qc (5)\cell\qc (6)\cell\qc (7)\cell\row
+\trowd\trgaph75\trleft-75\trqc\cellx4320\cellx5904\cellx7488\cellx8928\cellx10656\cellx12096\cellx13824\cellx15408
+\trowd\trgaph75\trleft-75\trqc\clbrdrb\brdrs\cellx4320\clbrdrb\brdrs\cellx5904\clbrdrb\brdrs\cellx7488\clbrdrb\brdrs\cellx8928\clbrdrb\brdrs\cellx10656\clbrdrb\brdrs\cellx12096\clbrdrb\brdrs\cellx13824\clbrdrb\brdrs\cellx15408
+\ql VARIABLES\cell\qc BG\cell\qc CZ\cell\qc DE\cell\qc DK\cell\qc ES\cell\qc FI\cell\qc GR\cell\row
+\trowd\trgaph75\trleft-75\trqc\cellx4320\cellx5904\cellx7488\cellx8928\cellx10656\cellx12096\cellx13824\cellx15408
+\ql \cell\qc \cell\qc \cell\qc \cell\qc \cell\qc \cell\qc \cell\qc \cell\row
+\ql price_gas\cell\qc 0.540***\cell\qc 1.621***\cell\qc 1.608***\cell\qc 1.584***\cell\qc 1.770***\cell\qc 0.834***\cell\qc 1.280***\cell\row
+\ql \cell\qc (0.047)\cell\qc (0.075)\cell\qc (0.062)\cell\qc (0.067)\cell\qc (0.065)\cell\qc (0.075)\cell\qc (0.108)\cell\row
+\ql Intermittent Renewables (GWh)\cell\qc -43.011***\cell\qc -54.841***\cell\qc -4.407***\cell\qc -28.461***\cell\qc -4.745***\cell\qc -20.316***\cell\qc -15.996***\cell\row
+\ql \cell\qc (5.699)\cell\qc (4.808)\cell\qc (0.136)\cell\qc (1.309)\cell\qc (0.345)\cell\qc (2.137)\cell\qc (1.764)\cell\row
+\ql Load (GWh)\cell\qc -29.351*\cell\qc -54.756***\cell\qc -0.341\cell\qc -108.089***\cell\qc 6.098*\cell\qc -153.195***\cell\qc 7.571*\cell\row
+\ql \cell\qc (16.339)\cell\qc (9.468)\cell\qc (1.004)\cell\qc (19.643)\cell\qc (3.457)\cell\qc (23.157)\cell\qc (4.516)\cell\row
+\ql \cell\qc \cell\qc \cell\qc \cell\qc \cell\qc \cell\qc \cell\qc \cell\row
+\ql Observations\cell\qc 10,224\cell\qc 10,224\cell\qc 10,224\cell\qc 10,224\cell\qc 10,224\cell\qc 10,224\cell\qc 10,224\cell\row
+\ql R-squared\cell\qc 0.778\cell\qc 0.780\cell\qc 0.873\cell\qc 0.753\cell\qc 0.877\cell\qc 0.638\cell\qc 0.817\cell\row
+\ql Month FE\cell\qc YES\cell\qc YES\cell\qc YES\cell\qc YES\cell\qc YES\cell\qc YES\cell\qc YES\cell\row
+\ql Hour FE\cell\qc YES\cell\qc YES\cell\qc YES\cell\qc YES\cell\qc YES\cell\qc YES\cell\qc YES\cell\row
+\trowd\trgaph75\trleft-75\trqc\trbrdrb\brdrs\clbrdrb\brdrs\cellx4320\clbrdrb\brdrs\cellx5904\clbrdrb\brdrs\cellx7488\clbrdrb\brdrs\cellx8928\clbrdrb\brdrs\cellx10656\clbrdrb\brdrs\cellx12096\clbrdrb\brdrs\cellx13824\clbrdrb\brdrs\cellx15408
+\ql Day of Week FE\cell\qc YES\cell\qc YES\cell\qc YES\cell\qc YES\cell\qc YES\cell\qc YES\cell\qc YES\cell\row
+\pard\qc
+Robust standard errors in parentheses\par
+*** p<0.01, ** p<0.05, * p<0.1\par
+}

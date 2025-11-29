@@ -1,0 +1,24 @@
+Pooled Regression		
+		(1)
+VARIABLES	LABELS	lncoalgen
+		
+rel_testN	Relative Price	0.696
+		(0.768)
+ire	Intermittent Renewables (GWh)	-0.024***
+		(0.003)
+load	Load (GWh)	0.082**
+		(0.031)
+load_sq	Load Squared (GWh)	-0.001*
+		(0.000)
+		
+Observations		139,174
+Number of country_num		14
+R-squared		0.313
+Country FE		YES
+Month FE		YES
+Hour FE		YES
+Day of Week FE		YES
+SE		Day Clustered
+Marginal Effect		0.212
+Robust standard errors in parentheses		
+*** p<0.01, ** p<0.05, * p<0.1		

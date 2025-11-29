@@ -173,6 +173,9 @@ foreach y in "BG" "CZ" "DE" "DK" "ES" "FI" "GR" "HR" "HU" "IT" "IE" "NL" "PL" "R
 }
 
 
+
+
+
 **EDF 6
 ***Main Specification estimates of passthrough 
 use main
@@ -194,3 +197,68 @@ foreach y in "BG" "CZ" "DE" "DK" "ES" "FI" "GR" "HR" "HU" "IT" "NL" "PL" "RO" {
 		}
 	}
 }
+
+
+**Autocorrelation diagnostics, heteroskedasticity is taken into account for in the clustered standard errors
+foreach y in "BG" "CZ" "DE" "DK" "ES" "FI" "GR" "HR" "HU" "IT" "IE" "NL" "PL" "RO" {
+
+	reg  lncoalgen c.rel_testN##c.rel_testN##c.rel_testN ire load load_sq c.dt i.hour i.dow if sample==1 & country=="`y'",cl(dt)
+	predict resid_`y' if country=="`y'", residuals
+}
+
+cap bys country (dt): gen _t_country = _n
+foreach y in "BG" "CZ" "DE" "DK" "ES" "FI" "GR" "HR" "HU" "IT" "IE" "NL" "PL" "RO" {
+
+	ac resid_`y' if country=="`y'", lags(24)  title(`y') name(`y'ac,replace) ytitle("Autocorrelation of `y' residuals")
+    pac resid_`y' if country=="`y'", lags(24)  title(`y') name(`y'pac,replace) ytitle("Partial Autocorrelation of `y' residuals")
+
+}
+graph combine BGac BGpac CZac CZpac DEac DEpac HUac HUpac NLac NLpac PLac PLpac, altshrink name("ac1")
+
+graph combine DKac DKpac ESac ESpac GRac GRpac FIac FIpac HRac HRpac ITac ITpac, altshrink name("ac2")
+
+
+
+
+**Daily Lag of Relative price included
+foreach y in "BG" "CZ" "DE" "DK" "ES" "FI" "GR" "HR" "HU" "IT" "IE" "NL" "PL" "RO" {
+
+	if "`y'"=="GR"{
+	reg  lncoalgen c.rel_testN##c.rel_testN##c.rel_testN L24.rel_testN ire load load_sq c.dt i.hour i.dow if sample==1 & country=="`y'",cl(dt)
+	margins, dydx(rel_testN)
+	local a=r(table)[rownumb(r(table),"b"),1]
+		outreg2  using "lagged.doc",  append addtext(Month FE, YES, Hour FE, YES, Day of Week FE, YES) keep(rel_testN L24.rel_testN rel_testN2 rel_testN3 ire load load_sq) label ctitle(`y') nocons bdec(3) sdec(3) addstat(Marginal Effect, `a')
+	}
+	else{
+		if "`y'"=="BG"{
+	reg  lncoalgen c.rel_testN##c.rel_testN##c.rel_testN L24.rel_testN ire load load_sq i.month i.hour i.dow if sample==1 & country=="`y'",cl(dt)
+	margins, dydx(rel_testN)
+	local a=r(table)[rownumb(r(table),"b"),1]
+			outreg2  using "lagged.doc",  replace addtext(Month FE, YES, Hour FE, YES, Day of Week FE, YES) keep(rel_testN L24.rel_testN rel_testN2 rel_testN3 ire load load_sq) label ctitle(`y') nocons bdec(3) sdec(3) addstat(Marginal Effect, `a')
+		}
+		else{
+	reg  lncoalgen c.rel_testN##c.rel_testN##c.rel_testN L24.rel_testN ire load load_sq i.month i.hour i.dow if sample==1 & country=="`y'",cl(dt)
+	margins, dydx(rel_testN)
+	local a=r(table)[rownumb(r(table),"b"),1]
+			outreg2  using "lagged.doc",  append addtext(Month FE, YES, Hour FE, YES, Day of Week FE, YES, SE, Day Clustered) keep(rel_testN L24.rel_testN rel_testN2 rel_testN3 ire load load_sq) label ctitle(`y') nocons bdec(3) sdec(3) addstat(Marginal Effect, `a')
+
+		}
+	}
+}
+
+xtset country_num t
+xtreg  lncoalgen c.rel_testN##c.rel_testN##c.rel_testN ire load load_sq i.month i.hour i.dow if sample==1,cl(country_num) fe
+margins, dydx(rel_testN) post
+local a=r(table)[rownumb(r(table),"b"),1]
+outreg2  using "pooled.doc",  replace addtext(Country FE, YES,Month FE, YES, Hour FE, YES, Day of Week FE, YES, SE, Day Clustered) keep(rel_testN ire load load_sq) label nocons bdec(3) sdec(3) addstat(Marginal Effect, `a') title("Pooled Regression")
+
+**Carbon price inclusive
+xtreg  lncoalgen c.rel_testN##c.rel_testN##c.rel_testN price_carbon ire load load_sq i.month i.hour i.dow if sample==1,cl(country_num) fe
+margins, dydx(rel_testN) post
+local a=r(table)[rownumb(r(table),"b"),1]
+outreg2  using "pooledCarbonP.doc",  replace addtext(Country FE, YES,Month FE, YES, Hour FE, YES, Day of Week FE, YES, SE, Day Clustered) keep(rel_testN price_carbon ire load load_sq) label nocons bdec(3) sdec(3) addstat(Marginal Effect, `a') title("Pooled Regression with Carbon Price")
+
+
+
+
+

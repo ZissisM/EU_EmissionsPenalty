@@ -2,16 +2,16 @@ use main
 
 **SI figures and tables and calculations
 
-**Timeseries of gas, carbon price, relative price 
-**Supp. Fig. XX-XX
-tw line price_gas t if sample==1 | year==2022, yline(180) sort xlabel(, format(%tCMon-CCYY)) xtitle("") ytitle("Natural Gas Price (EUR/MWh)") lwidth(*1.4) lcolor(maroon*0.8) name(g,replace)
-tw line price_carbon t if sample==1 | year==2022, yline(80) sort xlabel(, format(%tCMon-CCYY)) xtitle("") ytitle("Carbon price (EUR/ton CO2)") lwidth(*1.4) lcolor(dkorange*0.8) name(c,replace)
+**Timeseries of relative price 
+**Supp. Fig. 10
+//tw line price_gas t if sample==1 | year==2022, yline(180) sort xlabel(, format(%tCMon-CCYY)) xtitle("") ytitle("Natural Gas Price (EUR/MWh)") lwidth(*1.4) lcolor(maroon*0.8) name(g,replace)
+//tw line price_carbon t if sample==1 | year==2022, yline(80) sort xlabel(, format(%tCMon-CCYY)) xtitle("") ytitle("Carbon price (EUR/ton CO2)") lwidth(*1.4) lcolor(dkorange*0.8) name(c,replace)
 tw line rel_testN t if sample==1 | year==2022,sort xlabel(, format(%tCMon-CCYY)) xtitle("") lwidth(*1.4) lcolor(emerald*0.8) name(r,replace)
 graph combine g c r, rows(3) width(1500) altshrink
 
 **Excess Scatter Plots
-**Supp. Fig. XX
 
+**Supp. Fig. 13
 use excess_scat
 robreg mm excess_price gas_share if exclude==0
 matrix b=e(b)
@@ -36,7 +36,7 @@ replace z7= 2 if Country=="DK"
 twoway scatter excess_price gas_share if exclude==0, mlabel(labels) mlabvposition(z7) mlabsize(*1.3) msymbol(d) mcolor(maroon%75) msize(*1.5) color(navy) graphregion(lstyle(none)) title("C)",position(11) size(*1.4)) xtitle("Gas share",size(*1.47)) ylabel(,labsize(*1.6) grid gmax gmin glwidth(0.5)) legend(off) xlabel(,labsize(*1.5)) ytitle(Excess Electricity Price (EUR/MWh),size(*1.47)) name(gasP,replace) || function y=_b[gas_share]*x+_b[_cons],range(gas_share) || lfit excess_price gas_share if exclude==0, lcolor(ebblue*0.5) 
 
 
-
+*Unused
 robreg mm excess_price decarb_share if exclude==0
 matrix b=e(b)
 cap gen z7=1 
@@ -66,7 +66,7 @@ twoway scatter excess_price decarb_share if exclude==0, mlabel(labels) mlabvposi
 
 
 **Relative Index Scatter Plots
-**Supp. Fig.XX
+**Unused
 use excess_scat
 
 robreg mm correl gas_share if exclude==0
@@ -87,12 +87,12 @@ replace z7= 9 if Country=="DK"
 replace z7= 1 if Country=="IT"
 
 
-
 twoway scatter correl ire_share if exclude==0, mlabel(labels) mlabvposition(z7) mlabsize(*1.5) msymbol(d) mcolor(maroon%75) msize(*1.5) color(navy) graphregion(lstyle(none)) title("B)",position(11) size(*1.4)) xtitle("IRE share",size(*1.47)) ylabel(,labsize(*1.6) grid gmax gmin glwidth(0.5)) legend(off) xlabel(,labsize(*1.5)) ytitle("Relative Responsiveness",size(*1.4)) name(irecorr,replace) || function y=_b[ire_share]*x+_b[_cons],range(ire_share) || lfit correl ire_share if exclude==0, lcolor(ebblue*0.5) 
 
 
 
-**Supp. Tab. XX-XX
+**Supp. Fig. 8
+
 **Robustness is passthrough of carbon price to electricity price is 0.2 of the passthrough of NG to electricity, or if it is 0.5
 use main
 
@@ -110,7 +110,6 @@ gen totalBurdenTax2=(avg_load*change_electricitypricecarbonta2*1000)/1000
 gen totalBurdenTax3=(avg_load*change_electricitypricecarbonta3*1000)/1000
 
 
-
 graph bar change_electricitypricecarbonta2 change_electricitypricecarbonta3  ,over(Country)  legend( label(1 "Carbon Tax with lower pass-through assumption") label(2 "Carbon Tax with higher pass-through assumption") ring(1) position(6)) ytitle("2022 Wholesale Electricity Price Change (EUR/MWh)",size(*0.88)) asyvars bar(2,color(maroon)) bar(1,color(green)) intensity(50) name(PriceChange,replace) title("C)",position(11) size(*1.5))
 
 graph bar change_emissionscarbonta2 change_emissionscarbonta3 ,over(Country) legend( label(1 "Carbon Tax with lower pass-through assumption") label(2 "Carbon Tax with higher pass-through assumption") ring(1) position(6)) ytitle("Emission Change (Ktonnes CO2/Year)",size(*0.88))  asyvars bar(2,color(purple)) bar(1,color(emerald)) intensity(50) name(EmissionsChange,replace) title("B)",position(11)  size(*1.5))
@@ -123,7 +122,7 @@ graph combine  Total  EmissionsChange PriceChange Rev  ,altshrink
 
 
 
-*** Supp. Fig. XX
+*** Supp. Fig. 11
 *Distribution of coal and gas for select countries
 use main
 foreach y in  "CZ" "DE" "ES" "FI" "GR" "PL" {
@@ -133,7 +132,7 @@ graph combine CZbox DEbox ESbox FIbox GRbox PLbox, altshrink
 
 
 **Supplementary Tables for every country different specifications
-**Supp. Fig XX-XX
+**Supp. Tab. 1-13
 **Change specification for Greece to change month fixed efefcts to c.dt linear trend term
 use main
 foreach y in "CZ" "PL" "GR" "DE" "DK" "FI" "ES" "HU" "NL" "RO" "BG" "HR" "IT" "IE"  {
@@ -176,7 +175,8 @@ foreach y in "CZ" "PL" "GR" "DE" "DK" "FI" "ES" "HU" "NL" "RO" "BG" "HR" "IT" "I
 
 
 ***Functional Form Table 
-**Supp. Tab. XX
+
+**Supp. Tab. 14
 use main 
 cap{
 gen quadratic = .
@@ -303,7 +303,7 @@ foreach y in "BG" "CZ" "DE" "DK" "ES" "FI" "GR" "HR" "HU" "IT" "IE" "NL" "PL" "R
 
 
 
-****SAMPLE PERIOD ROBUSTNESS CHECKS (Supp. FIG XX-XX)
+****SAMPLE PERIOD ROBUSTNESS CHECKS (Supp. FIG 16-19 & 15)**
 
 gen period = .
 // Initialize the period variable with missing values
@@ -453,13 +453,14 @@ foreach y in "BG" "CZ" "DE" "DK" "ES" "FI" "GR" "HR" "HU" "IT" "IE" "NL" "PL" "R
 }
 
 
-**Robustness Check passthorugh sample different time period  2021&2022 (Supp. Fig XX)
+**Robustness Check passthorugh sample different time period  2021&2022 (Supp. Fig 22)
+
 foreach y in "BG" "CZ" "DE" "DK" "ES" "FI" "GR" "HR" "HU" "IT" "NL" "PL" "RO" {
 	//foreach y in "BG" "RO" {
 	reg electricity_prices price_gas i.month i.hour i.dow ire c.load##c.load if country=="`y'" & year>2020,cl(dt)
 }
 
-**SI Passthorugh ROBUSTNESS different time period (2022) (Supp. Fig XX)
+**SI Passthorugh ROBUSTNESS different time period (2022) (Supp. Fig 21)
 foreach y in "BG" "CZ" "DE" "DK" "ES" "FI" "GR" "HR" "HU" "IT" "NL" "PL" "RO" {
 	reg electricity_prices price_gas i.month i.hour i.dow ire c.load##c.load if country=="`y'" & year>2021,cl(dt)
 	//local meanss = r(mean)
@@ -478,11 +479,11 @@ foreach y in "BG" "CZ" "DE" "DK" "ES" "FI" "GR" "HR" "HU" "IT" "NL" "PL" "RO" {
 }
 
 
-**Supp. Fig. XX (Fig 2D no DE or PL)
+**Supp. Fig. 17 (Fig 2D no DE or PL)
 graph box y_coal_lignite if sample==1 &country!="DE" &country!="PL",over(country,sort(1)) title("Coal Generation April 2021-June 2022") intensity(65) ylabel(,labsize(*1.3)) ytitle("MWh",size(*1.3)) asyvars nooutsides showyvars legend(off)
 
 
-**Supp. Fig. XX (Revenue Difference)
+**Supp. Fig. 7 (Revenue Difference)
 graph hbar rev_dif, over(Country,sort(1) descending)  title("Difference between Revenue and Burden under Carbon Tax") intensity(65) ylabel(,labsize(*1.3)) ytitle("Euros (Thousands)",size(*1.3))   legend(off)
 
 **Multivariate Tables of excesses, RRI against shares
@@ -494,7 +495,7 @@ robreg mm correl coal_share gas_share solar_share wind_share hydro_share,vce(rob
 outreg2 using results_table4.doc, replace title("Multivariate regression results: Relative Responsiveness") 
 
 
-***SI VERSIONS OF DIFFERENT ELASTICITY**** (Supp. Fig XX)
+***SI VERSIONS OF DIFFERENT ELASTICITY**** (Supp. Fig 6)
 
 use elasticity_SI or in main.dta
 
