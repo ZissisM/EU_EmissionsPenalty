@@ -252,13 +252,29 @@ margins, dydx(rel_testN) post
 local a=r(table)[rownumb(r(table),"b"),1]
 outreg2  using "pooled.doc",  replace addtext(Country FE, YES,Month FE, YES, Hour FE, YES, Day of Week FE, YES, SE, Day Clustered) keep(rel_testN ire load load_sq) label nocons bdec(3) sdec(3) addstat(Marginal Effect, `a') title("Pooled Regression")
 
+
 **Carbon price inclusive
-xtreg  lncoalgen c.rel_testN##c.rel_testN##c.rel_testN price_carbon ire load load_sq i.month i.hour i.dow if sample==1,cl(country_num) fe
-margins, dydx(rel_testN) post
-local a=r(table)[rownumb(r(table),"b"),1]
-outreg2  using "pooledCarbonP.doc",  replace addtext(Country FE, YES,Month FE, YES, Hour FE, YES, Day of Week FE, YES, SE, Day Clustered) keep(rel_testN price_carbon ire load load_sq) label nocons bdec(3) sdec(3) addstat(Marginal Effect, `a') title("Pooled Regression with Carbon Price")
+foreach y in "BG" "CZ" "DE" "DK" "ES" "FI" "GR" "HR" "HU" "IT" "IE" "NL" "PL" "RO" {
 
+	if "`y'"=="GR"{
+		reg  lncoalgen c.rel_testN##c.rel_testN##c.rel_testN price_carbon ire load load_sq c.dt i.hour i.dow if sample==1 & country=="`y'",cl(dt)
+		margins, dydx(rel_testN)
+		local a=r(table)[rownumb(r(table),"b"),1]
+		outreg2  using "regcarbonP.doc",  append addtext(Month FE, YES, Hour FE, YES, Day of Week FE, YES) keep(rel_testN price_carbon rel_testN2 rel_testN3 ire load load_sq) label ctitle(`y') nocons bdec(3) sdec(3) addstat(Marginal Effect, `a')
+	}
+	else{
+		if "`y'"=="BG"{
+			reg  lncoalgen c.rel_testN##c.rel_testN##c.rel_testN price_carbon ire load load_sq i.month i.hour i.dow if sample==1 & country=="`y'",cl(dt)
+			margins, dydx(rel_testN)
+			local a=r(table)[rownumb(r(table),"b"),1]
+			outreg2  using "regcarbonP.doc",  replace addtext(Month FE, YES, Hour FE, YES, Day of Week FE, YES) keep(rel_testN price_carbon rel_testN2 rel_testN3 ire load load_sq) label ctitle(`y') nocons bdec(3) sdec(3) addstat(Marginal Effect, `a')
+		}
+		else{
+			reg  lncoalgen c.rel_testN##c.rel_testN##c.rel_testN price_carbon ire load load_sq i.month i.hour i.dow if sample==1 & country=="`y'",cl(dt)
+			margins, dydx(rel_testN)
+			local a=r(table)[rownumb(r(table),"b"),1]
+			outreg2  using "regcarbonP.doc",  append addtext(Month FE, YES, Hour FE, YES, Day of Week FE, YES, SE, Day Clustered) keep(rel_testN price_carbon rel_testN2 rel_testN3 ire load load_sq) label ctitle(`y') nocons bdec(3) sdec(3) addstat(Marginal Effect, `a')
 
-
-
-
+		}
+	}
+}
