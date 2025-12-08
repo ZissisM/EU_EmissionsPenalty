@@ -2,7 +2,7 @@
 
 ***EDF 1
 *Relative responsiveness index relationship with change in wholesale electricity price under the two different policies
-use excess_scat
+use Fig5_new
 robreg mm correl change_elecPriceGasCap_rel if exclude==0
 matrix b=e(b)
 replace z7=3 if Country=="RO"

@@ -124,15 +124,15 @@ replace rev_dif=Carbon_Revenue-totalBurdenTax
 
 
 *relative sub graph 
-*Supp. Fig. XX
+*Supp. Fig. 4
 graph bar rel_sub,over(Country)  ytitle("Relative Substitution Emissions Change") intensity(50) name(Total,replace) title("",position(11)  size(*1.5))
 
 *relative output effect 
-* Supp. Fig. XX
+* Supp. Fig. 5
 graph bar  change_elecPriceGasCap_rel change_elecriceCarbonTax_rel   ,over(Country)  legend( label(1 "180 EUR/MWh Natural Gas Cap") label(2 "Equivalent (12.18 EUR/tonne) Carbon Tax") ring(1) position(6)) ytitle("Relative 2022 Wholesale Electricity Price Change",size(*0.88)) asyvars bar(2,color(maroon)) bar(1,color(green)) intensity(50) name(PriceChange,replace) title("C)",position(11) size(*1.5))
 
 *Substitution effect (ktonnes/year)
-*Supp. Fig. XX
+*Supp. Fig. 3
 graph bar  subYN   ,over(Country) ytitle("Substitution (Ktonnes CO2/year)",size(*0.88))  intensity(50) name(PriceChange,replace) title("",position(11) size(*1.5))
 
 *Changed this to have subYN (new subyear from above excel)
@@ -174,10 +174,4 @@ graph export "fig5d.svg", as(svg) width(2500) replace
 
 graph combine Total  EmissionsChange PriceChange Rev  ,altshrink  
 graph export Fig5.svg, as(svg) width(3000) replace
-
-
-**Relative
-*Supp. Fig. XX
-
-graph bar change_elecPriceGasCap_rel change_elecriceCarbonTax_rel  ,over(Country)  legend( label(1 "180 EUR/MWh Natural Gas Cap") label(2 "Equivalent (12.18 EUR/tonne) Carbon Tax") ring(1) position(6)) ytitle("2022 Relative Wholesale Electricity Price Change (EUR/MWh)",size(*0.88)) asyvars bar(2,color(maroon)) bar(1,color(green)) intensity(50) name(PriceChange,replace) title("",position(11) size(*1.5))
 
