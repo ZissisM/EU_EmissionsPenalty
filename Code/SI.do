@@ -497,7 +497,7 @@ outreg2 using results_table4.doc, replace title("Multivariate regression results
 
 ***SI VERSIONS OF DIFFERENT ELASTICITY**** (Supp. Fig 6)
 
-use elasticity_SI or in main.dta
+//use main.dta
 
 replace elasticity=-0.03
 replace change_electricityGenGasCap=change_gaspriceCap/avg_electricity*elasticity*avg_load*1000 if year==2022
@@ -505,14 +505,14 @@ replace change_electricityGenCarbonTax=change_electricityPriceCarbonTax/avg_elec
 replace change_emissionsGasCapLow=change_electricityGenGasCap*emissions_fac*24*365/1000 if year==2022
 replace change_emissionsCarbonTaxLow=change_electricityGenCarbonTax*emissions_fac*24*365/1000 if year==2022
 
-replace elasticity=-0.15
+replace elasticity=-0.08
 replace change_electricityGenGasCap=change_gaspriceCap/avg_electricity*elasticity*avg_load*1000 if year==2022
 replace change_electricityGenCarbonTax=change_electricityPriceCarbonTax/avg_electricity*elasticity*avg_load*1000 if year==2022
-gen change_emissionsGasCapHigh1=change_electricityGenGasCap*emissions_fac*24*365/1000 if year==2022
-gen change_emissionsCarbonTaxHigh1=change_electricityGenCarbonTax*emissions_fac*24*365/1000 if year==2022
+replace change_emissionsGasCapHigh1=change_electricityGenGasCap*emissions_fac*24*365/1000 if year==2022
+replace change_emissionsCarbonTaxHigh1=change_electricityGenCarbonTax*emissions_fac*24*365/1000 if year==2022
 
 
-replace elasticity=-0.25
+replace elasticity=-0.12
 replace change_electricityGenGasCap=change_gaspriceCap/avg_electricity*elasticity*avg_load*1000 if year==2022
 replace change_electricityGenCarbonTax=change_electricityPriceCarbonTax/avg_electricity*elasticity*avg_load*1000 if year==2022
 replace change_emissionsGasCapHigh=change_electricityGenGasCap*emissions_fac*24*365/1000 if year==2022
@@ -521,29 +521,47 @@ replace change_emissionsCarbonTaxHigh=change_electricityGenCarbonTax*emissions_f
 //import excel "/Users/ZMarmarelis/Downloads/Fig4_elasticityrobust.xlsx", sheet("Sheet1") firstrow
 
 *low elasticity
-graph bar change_emissionsGasCapLow change_emissionsCarbonTaxLow if !missing(avg_electricity) & year==2022 ,over(country)  legend( label(1 "180 EUR/MWh Natural Gas Cap") label(2 "Equivalent Carbon Tax") ring(1) position(6))  ytitle("Output Effect Emissions (Ktonnes CO2/Year)",size(*0.9))  asyvars bar(2,color(purple)) bar(1,color(emerald)) intensity(50) name(EmissionsChangeElasticitiesLow,replace) title("A) Low Demand Elasticity (-0.03)",position(11)  size(*1))
+graph bar change_emissionsGasCapLow change_emissionsCarbonTaxLow if !missing(avg_electricity) & year==2022 ,over(country)  legend( label(1 "180 EUR/MWh Natural Gas Cap") label(2 "Equivalent Carbon Tax") ring(1) position(6))  ytitle("Output Effect Emissions (Ktonnes CO2/Year)",size(*1.1))  asyvars bar(2,color(purple)) bar(1,color(emerald)) intensity(50) name(EmissionsChangeElasticitiesLow,replace) title("A) Low Demand Elasticity (-0.03)",position(11)  size(*1))
 
+replace totalEC=change_emissionsGasCapLow+sub_emissions_year
+replace totalET=change_emissionsCarbonTaxLow+sub_emissions_year
 
-*Medium elasticity
-graph bar  change_emissionsGasCapHigh1 change_emissionsCarbonTaxHigh1 if !missing(avg_electricity) & year==2022,over(country)  legend( label(1 "180 EUR/MWh Natural Gas Cap") label(2 "Equivalent Carbon Tax") ring(1) position(6))  ytitle("Output Effect Emissions (Ktonnes CO2/Year)",size(*0.9))  asyvars bar(2,color(purple)) bar(1,color(emerald)) intensity(50) name(EmissionsChangeElasticitiesMed,replace) title("B) High Demand Elasticity (-0.15)",position(11)  size(*1))
+graph bar totalEC totalET ,over(country) legend( label(1 "180 EUR/MWh Natural Gas Cap") label(2 "Equivalent (12.18 EUR/tonne) Carbon Tax") ring(1) position(6))  ytitle("Total Emissions Change (Ktonnes CO2/Year)",size(*1/1)) asyvars bar(2,color(khaki)) bar(1,color(ebblue)) intensity(50) name(Total1,replace) title("D)",position(11)  size(*1))
+
 
 *high elasticity
-graph bar  change_emissionsGasCapHigh change_emissionsCarbonTaxHigh if !missing(avg_electricity) & year==2022,over(country)  legend( label(1 "180 EUR/MWh Natural Gas Cap") label(2 "Equivalent Carbon Tax ") ring(1) position(6))  ytitle("Output Effect Emissions (Ktonnes CO2/Year)",size(*0.9))  asyvars bar(2,color(purple)) bar(1,color(emerald)) intensity(50) name(EmissionsChangeElasticitiesHigh,replace) title("C) Very High Demand Elasticity (-0.25)",position(11)  size(*1))
+graph bar  change_emissionsGasCapHigh1 change_emissionsCarbonTaxHigh1 if !missing(avg_electricity) & year==2022,over(country)  legend( label(1 "180 EUR/MWh Natural Gas Cap") label(2 "Equivalent Carbon Tax") ring(1) position(6))  ytitle("Output Effect Emissions (Ktonnes CO2/Year)",size(*1.1))  asyvars bar(2,color(purple)) bar(1,color(emerald)) intensity(50) name(EmissionsChangeElasticitiesMed,replace) title("B) High Demand Elasticity (-0.08)",position(11)  size(*1))
 
-graph combine EmissionsChangeElasticitiesLow EmissionsChangeElasticitiesMed EmissionsChangeElasticitiesHigh,altshrink name(altElasticities,replace) rows(1)
+replace totalEC=change_emissionsGasCapHigh1+sub_emissions_year
+replace totalET=change_emissionsCarbonTaxHigh1+sub_emissions_year
+
+graph bar totalEC totalET ,over(country) legend( label(1 "180 EUR/MWh Natural Gas Cap") label(2 "Equivalent (12.18 EUR/tonne) Carbon Tax") ring(1) position(6))  ytitle("Total Emissions Change (Ktonnes CO2/Year)",size(*1/1)) asyvars bar(2,color(khaki)) bar(1,color(ebblue)) intensity(50) name(Total2,replace) title("E)",position(11)  size(*1))
 
 
-**Or the below depending on which data file used (elasticity_SI)
-replace change_electricityGenGasCap=change_electricityPriceGasCap/avg_electricity*elasticity*avg_load*1000
-replace change_electricityGenCarbonTax=change_electricityPriceCarbonTax/avg_electricity*elasticity*avg_load*1000
-gen change_emissionsGasCapLow=change_electricityGenGasCap*emissions_fac*24*365/1000
-gen change_emissionsCarbonTaxLow=change_electricityGenCarbonTax*emissions_fac*24*365/1000
+*very high elasticity
+graph bar  change_emissionsGasCapHigh change_emissionsCarbonTaxHigh if !missing(avg_electricity) & year==2022,over(country)  legend( label(1 "180 EUR/MWh Natural Gas Cap") label(2 "Equivalent Carbon Tax ") ring(1) position(6))  ytitle("Output Effect Emissions (Ktonnes CO2/Year)",size(*1.1))  asyvars bar(2,color(purple)) bar(1,color(emerald)) intensity(50) name(EmissionsChangeElasticitiesHigh,replace) title("C) Very High Demand Elasticity (-0.12)",position(11)  size(*1))
 
-replace elasticity=-0.35
-replace change_electricityGenGasCap=change_electricityPriceGasCap/avg_electricity*elasticity*avg_load*1000
-replace change_electricityGenCarbonTax=change_electricityPriceCarbonTax/avg_electricity*elasticity*avg_load*1000
-gen change_emissionsGasCapHigh=change_electricityGenGasCap*emissions_fac*24*365/1000
-gen change_emissionsCarbonTaxHigh=change_electricityGenCarbonTax*emissions_fac*24*365/1000
+
+replace totalEC=change_emissionsGasCapHigh+sub_emissions_year
+replace totalET=change_emissionsCarbonTaxHigh+sub_emissions_year
+
+graph bar totalEC totalET ,over(country) legend( label(1 "180 EUR/MWh Natural Gas Cap") label(2 "Equivalent (12.18 EUR/tonne) Carbon Tax") ring(1) position(6))  ytitle("Total Emissions Change (Ktonnes CO2/Year)",size(*1/1)) asyvars bar(2,color(khaki)) bar(1,color(ebblue)) intensity(50) name(Total3,replace) title("F)",position(11)  size(*1))
+
+
+graph combine EmissionsChangeElasticitiesLow EmissionsChangeElasticitiesMed EmissionsChangeElasticitiesHigh Total1 Total2 Total3,altshrink name(altElasticities,replace) rows(2)
+
+
+// **Or the below depending on which data file used (elasticity_SI)
+// replace change_electricityGenGasCap=change_electricityPriceGasCap/avg_electricity*elasticity*avg_load*1000
+// replace change_electricityGenCarbonTax=change_electricityPriceCarbonTax/avg_electricity*elasticity*avg_load*1000
+// gen change_emissionsGasCapLow=change_electricityGenGasCap*emissions_fac*24*365/1000
+// gen change_emissionsCarbonTaxLow=change_electricityGenCarbonTax*emissions_fac*24*365/1000
+
+// replace elasticity=-0.35
+// replace change_electricityGenGasCap=change_electricityPriceGasCap/avg_electricity*elasticity*avg_load*1000
+// replace change_electricityGenCarbonTax=change_electricityPriceCarbonTax/avg_electricity*elasticity*avg_load*1000
+// gen change_emissionsGasCapHigh=change_electricityGenGasCap*emissions_fac*24*365/1000
+// gen change_emissionsCarbonTaxHigh=change_electricityGenCarbonTax*emissions_fac*24*365/1000
 
 // *Save to excel
 // putexcel set Fig4_elasticityrobust, replace
@@ -589,8 +607,8 @@ gen change_emissionsCarbonTaxHigh=change_electricityGenCarbonTax*emissions_fac*2
 // graph combine  EmissionsChangeElasticitiesLow EmissionsChangeElasticitiesHigh,name(elasticities,replace)  altshrink
 
 
-**Unused
-use emissions_long
-graph bar emissions, over(year) by(country,yrescale) ytitle("Mtonnes CO2") legend(off) intensity(50) bar(1,color(purple*0.5))  bar(2,color(purple*0.5))  bar(3,color(purple*0.5))  bar(4,color(purple*0.5))  bar(5,color(purple*0.5))  bar(6,color(dkorange*0.7)) asyvars showyvars 
+// **Unused
+// use emissions_long
+// graph bar emissions, over(year) by(country,yrescale) ytitle("Mtonnes CO2") legend(off) intensity(50) bar(1,color(purple*0.5))  bar(2,color(purple*0.5))  bar(3,color(purple*0.5))  bar(4,color(purple*0.5))  bar(5,color(purple*0.5))  bar(6,color(dkorange*0.7)) asyvars showyvars 
 
 
