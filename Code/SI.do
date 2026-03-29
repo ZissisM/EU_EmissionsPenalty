@@ -135,41 +135,53 @@ graph combine CZbox DEbox ESbox FIbox GRbox PLbox, altshrink
 **Supp. Tab. 1-13
 **Change specification for Greece to change month fixed efefcts to c.dt linear trend term
 use main
-foreach y in "CZ" "PL" "GR" "DE" "DK" "FI" "ES" "HU" "NL" "RO" "BG" "HR" "IT" "IE"  {
-	//foreach y in   {
+//foreach y in "CZ" "PL" "DE" "DK" "FI" "ES" "HU" "NL" "RO" "BG" "HR" "IT" "IE"  {
+foreach y in  "GR" {
 
 
 	reg  lncoalgen c.rel_testN##c.rel_testN##c.rel_testN if sample == 1 & country == "`y'", vce(robust)
 	margins, dydx(rel_testN)
 	local a=r(table)[rownumb(r(table),"b"),1]
+	local p=r(table)[rownumb(r(table),"pvalue"),1]
+	local p = max(`p', 0.00000001) 
 	//reg  cf_coal2 c.rel_testN##c.rel_testN##c.rel_testN if sample==1 & country=="`y'",vce(robust)
-	outreg2 using `y'SI_109.doc,replace se label adjr2  bdec(2)  keep(rel_testN c.rel_testN#c.rel_testN c.rel_testN#c.rel_testN#c.rel_testN) addtext(Month FE,NO , Hour FE, NO, Day-of-Week FE, NO, SE, Robust) title(`y') nocons addstat(Marginal Effect, `a') ctitle(" ")
+	outreg2 using `y'SI_109.doc,replace se label adjr2  bdec(2)  keep(rel_testN c.rel_testN#c.rel_testN c.rel_testN#c.rel_testN#c.rel_testN) addtext(Month FE,NO , Hour FE, NO, Day-of-Week FE, NO, SE, Robust) title(`y') nocons addstat(Marginal Effect, `a', P-value, `p') ctitle(" ") 
 
 	reg  lncoalgen c.rel_testN##c.rel_testN##c.rel_testN ire load load_sq if sample == 1 & country == "`y'",vce(robust)
 	margins, dydx(rel_testN)
 	local a=r(table)[rownumb(r(table),"b"),1]
-	outreg2 using `y'SI_109.doc,append se label adjr2  bdec(2)  keep(rel_testN c.rel_testN#c.rel_testN c.rel_testN#c.rel_testN#c.rel_testN ire load) addtext(Month FE, NO , Hour FE, NO, Day-of-Week FE, NO, SE, Robust) title(`y') nocons  addstat(Marginal Effect, `a') ctitle(" ")
+	local p=r(table)[rownumb(r(table),"pvalue"),1]
+	local p = max(`p', 0.00000001) 
+	outreg2 using `y'SI_109.doc,append se label adjr2  bdec(2)  keep(rel_testN c.rel_testN#c.rel_testN c.rel_testN#c.rel_testN#c.rel_testN ire load) addtext(Month FE, NO , Hour FE, NO, Day-of-Week FE, NO, SE, Robust) title(`y') nocons  addstat(Marginal Effect, `a', P-value, `p') ctitle(" ") 
 
 
 	reg  lncoalgen c.rel_testN##c.rel_testN##c.rel_testN ire y_nuclear load load_sq if sample == 1 & country == "`y'",vce(robust)
 	margins, dydx(rel_testN)
 	local a=r(table)[rownumb(r(table),"b"),1]
-	outreg2 using `y'SI_109.doc,append se label adjr2  bdec(2)  keep(rel_testN c.rel_testN#c.rel_testN y_nuclear c.rel_testN#c.rel_testN#c.rel_testN ire load load_sq y_nuclear) addtext(Month FE, YES , Hour FE, NO, Day-of-Week FE, NO, SE, Robust) title(`y') nocons  addstat(Marginal Effect, `a') ctitle(" ")
+	local p=r(table)[rownumb(r(table),"pvalue"),1]
+	local p = max(`p', 0.00000001) 
+	outreg2 using `y'SI_109.doc,append se label adjr2  bdec(2)  keep(rel_testN c.rel_testN#c.rel_testN y_nuclear c.rel_testN#c.rel_testN#c.rel_testN ire load load_sq y_nuclear) addtext(Month FE, YES , Hour FE, NO, Day-of-Week FE, NO, SE, Robust) title(`y') nocons  addstat(Marginal Effect, `a', P-value, `p') ctitle(" ") 
 
-	reg  lncoalgen c.rel_testN##c.rel_testN##c.rel_testN ire load load_sq i.month i.hour i.dow if sample == 1 & country == "`y'",vce(robust)
+	reg  lncoalgen c.rel_testN##c.rel_testN##c.rel_testN ire load load_sq c.dt i.hour i.dow if sample == 1 & country == "`y'",vce(robust)
 	margins, dydx(rel_testN)
 	local a=r(table)[rownumb(r(table),"b"),1]
-	outreg2 using `y'SI_109.doc,append se label adjr2  bdec(2)  keep(rel_testN c.rel_testN#c.rel_testN c.rel_testN#c.rel_testN#c.rel_testN ire load load_sq) addtext(Month FE, YES , Hour FE, YES, Day-of-Week FE, YES, SE, Robust) title(`y') nocons  addstat(Marginal Effect, `a') ctitle(" ")
+	local p=r(table)[rownumb(r(table),"pvalue"),1]
+	local p = max(`p', 0.00000001) 
+	outreg2 using `y'SI_109.doc,append se label adjr2  bdec(2)  keep(rel_testN c.rel_testN#c.rel_testN c.rel_testN#c.rel_testN#c.rel_testN ire load load_sq) addtext(Month FE, YES , Hour FE, YES, Day-of-Week FE, YES, SE, Robust) title(`y') nocons  addstat(Marginal Effect, `a', P-value, `p') ctitle(" ") 
 
-	reg  lncoalgen c.rel_testN##c.rel_testN##c.rel_testN ire load load_sq i.month i.hour i.dow if sample==1 & country=="`y'",cl(dt)
+	reg  lncoalgen c.rel_testN##c.rel_testN##c.rel_testN ire load load_sq c.dt i.hour i.dow if sample==1 & country=="`y'",cl(dt)
 	margins, dydx(rel_testN)
 	local a=r(table)[rownumb(r(table),"b"),1]
-	outreg2 using `y'SI_109.doc,append se label adjr2  bdec(2)  keep(rel_testN c.rel_testN#c.rel_testN c.rel_testN#c.rel_testN#c.rel_testN ire load load_sq) addtext(Month FE, YES , Hour FE, YES, Day-of-Week FE, YES,  SE, Day Clustered) title(`y') nocons  addstat(Marginal Effect, `a') ctitle(" ")
+	local p=r(table)[rownumb(r(table),"pvalue"),1]
+	local p = max(`p', 0.00000001) 
+	outreg2 using `y'SI_109.doc,append se label adjr2  bdec(2)  keep(rel_testN c.rel_testN#c.rel_testN c.rel_testN#c.rel_testN#c.rel_testN ire load load_sq) addtext(Month FE, YES , Hour FE, YES, Day-of-Week FE, YES,  SE, Day Clustered) title(`y') nocons  addstat(Marginal Effect, `a', P-value, `p') ctitle(" ") 
 
-	newey  lncoalgen c.rel_testN##c.rel_testN##c.rel_testN i.hour ire load load_sq i.dow i.month if sample == 1 & country == "`y'", lag(2) force 
+	newey  lncoalgen c.rel_testN##c.rel_testN##c.rel_testN i.hour ire load load_sq i.dow c.dt if sample == 1 & country == "`y'", lag(1) force 
 	margins, dydx(rel_testN)
 	local a=r(table)[rownumb(r(table),"b"),1]
-	outreg2 using `y'SI_109.doc,append se label  bdec(2)  keep(rel_testN c.rel_testN#c.rel_testN c.rel_testN#c.rel_testN#c.rel_testN ire load load_sq) addtext(Month FE,YES , Hour FE, YES, Day-of-Week FE, YES, SE, Newey) title(`y') nocons addstat(Marginal Effect, `a') ctitle(" ")
+	local p=r(table)[rownumb(r(table),"pvalue"),1]
+	local p = max(`p', 0.00000001) 
+	outreg2 using `y'SI_109.doc,append se label  bdec(2)  keep(rel_testN c.rel_testN#c.rel_testN c.rel_testN#c.rel_testN#c.rel_testN ire load load_sq) addtext(Month FE,YES , Hour FE, YES, Day-of-Week FE, YES, SE, Newey) title(`y') nocons addstat(Marginal Effect, `a', P-value, `p') ctitle(" ") 
 }
 
 
