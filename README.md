@@ -29,7 +29,7 @@
  
  **Extended Data and SI Figures**
 
- EDF.do: Generates all Extended Data Figure panels (uses *excess_scat* dataset) and tables (uses *main* dataset).
+ EDF.do: Generates all Extended Data Figure panels (uses *excess_scat* dataset) and tables (uses *main* dataset). These are now Supplementary Figures 27-32.
 
  SI.do: Generates all Supplementary Figure panels and tables (besides the ones mentioned above). Each dataset used is specified above each panel (either *main* or *excess_scat*).
 
